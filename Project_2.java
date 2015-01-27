@@ -91,23 +91,22 @@ public class Project_2 {
 	public static class ParkingTicket {
 		ParkingTicket() {}
 		
-		ParkedCar getParkedInfo (ParkedCar parkedCar) {
-//			parkedCar.getMaker();
-//			parkedCar.getColor();
-//			parkedCar.getModel();
-//			parkedCar.getLisenceNumber();
-//			
-			return parkedCar;
+		void getParkedInfo (ParkedCar parkedCar) {
+			System.out.printf("License Number: " + parkedCar.getLisenceNumber() + "\n");
+			System.out.printf("Maker: " + parkedCar.getMaker() +
+					"\t Model: " + parkedCar.getModel() + "\t Color: " + parkedCar.getColor() + " \n");
 		}
 		
-		double calculateFine(int min) {
+		double calculateFine(ParkedCar parkedCar, ParkingMeter parkingMeter) {
 			double parkedFine = 0;
-			double hrs = min/60;
+			double violatedTime = parkedCar.getParkedTime() - parkingMeter.getPurchasedTime();
+			double hrs = violatedTime/60;
+			double min = violatedTime % 60;
 			
 			if (hrs <= 1) {
 				parkedFine = 25;
 			}
-			else {
+			else if (hrs > 1 && min > 0){
 				hrs -= 1;
 				parkedFine = 25 + hrs*10;
 			}
@@ -115,11 +114,9 @@ public class Project_2 {
 			return parkedFine;
 		}
 		
-		PoliceOfficer getPoliceInfo(PoliceOfficer policeOfficer) {
-			policeOfficer.getName();
-			policeOfficer.getBadgeNumber();
-			
-			return policeOfficer;
+		void getPoliceInfo(PoliceOfficer policeOfficer) {
+			System.out.printf("Police Officer: " + policeOfficer.getName() +
+					"\nBadge Number: " + policeOfficer.getBadgeNumber() + " \n");
 		}
 	}
 
@@ -170,32 +167,26 @@ public class Project_2 {
 		void issueTicket (ParkedCar parkedCar,ParkingMeter parkingMeter, ParkingTicket parkingTicket, PoliceOfficer policeOfficer) {
 			if (policeOfficer.expired(parkedCar, parkingMeter) == true) { 
 				System.out.printf("\t\t\t PARKING VIOLATION \n");
-				System.out.printf("License Number: " + parkingTicket.getParkedInfo(parkedCar).getLisenceNumber() + "\n");
-				System.out.printf("Maker: " + parkingTicket.getParkedInfo(parkedCar).getMaker() +
-							"\t Model: " + parkingTicket.getParkedInfo(parkedCar).getModel() +
-							"\t Model: " + parkingTicket.getParkedInfo(parkedCar).getColor() + " \n");
-				System.out.printf("Parked Time: " + parkingTicket.getParkedInfo(parkedCar).getParkedTime() +
+				parkingTicket.getParkedInfo(parkedCar);
+				System.out.printf("Parked Time: " + parkedCar.getParkedTime() +
 							"\t\t Purchased Time: " + parkingMeter.getPurchasedTime() + " \n");
-				System.out.printf("Fine Amount: " + parkingTicket.calculateFine(61) + " \n");
-				System.out.printf("Police Officer: " + parkingTicket.getPoliceInfo(policeOfficer).getName() +
-							" Badge Number: " + parkingTicket.getPoliceInfo(policeOfficer).getBadgeNumber() + " \n");
+				
+				System.out.printf("Fine Amount: $%1.2f \n", parkingTicket.calculateFine(parkedCar, parkingMeter));
+				parkingTicket.getPoliceInfo(policeOfficer);
 			}
 			else {
 				System.out.printf("Ticket is not issued \n");
 			}
 		}
-
 	}
 
 	public static void main(String[] args) {
-		ParkedCar parkedCar = new ParkedCar("Lamborghini", "Aventador LP 700-4", "Black", "nDebt", 45);
-		ParkingMeter parkingMeter = new ParkingMeter(40);
+		ParkedCar parkedCar = new ParkedCar("Lamborghini", "Aventador LP 700-4", "Black", "nDebt", 145);
+		ParkingMeter parkingMeter = new ParkingMeter(24);
 		PoliceOfficer policeOfficer = new PoliceOfficer("Howard A. Pollman", 8441);
 		ParkingTicket parkingTicket = new ParkingTicket();
 		
 		policeOfficer.issueTicket(parkedCar, parkingMeter, parkingTicket, policeOfficer);
-		
-
 	}
 
 }
