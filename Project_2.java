@@ -92,22 +92,25 @@ public class Project_2 {
 		ParkingTicket() {}
 		
 		void getParkedInfo (ParkedCar parkedCar) {
-			System.out.printf("License Number: " + parkedCar.getLisenceNumber() + "\n");
+			System.out.printf("License Number: " + parkedCar.getLisenceNumber()
+							+ "\t Color: " + parkedCar.getColor() +"\n");
 			System.out.printf("Maker: " + parkedCar.getMaker() +
-					"\t Model: " + parkedCar.getModel() + "\t Color: " + parkedCar.getColor() + " \n");
+					"\t Model: " + parkedCar.getModel() +  " \n");
 		}
 		
 		double calculateFine(ParkedCar parkedCar, ParkingMeter parkingMeter) {
 			double parkedFine = 0;
-			double violatedTime = parkedCar.getParkedTime() - parkingMeter.getPurchasedTime();
-			double hrs = violatedTime/60;
-			double min = violatedTime % 60;
 			
-			if (hrs <= 1) {
+			// The violated time is calculated by the difference between the time purchased from the parked time
+			double violatedTime = parkedCar.getParkedTime() - parkingMeter.getPurchasedTime();
+			double hrs = violatedTime/60;	// Convert to hours
+			double min = violatedTime % 60;	// Convert to minutes
+			
+			if (hrs <= 1) {	// For parking inappropriately equal or under 1 hour 
 				parkedFine = 25;
 			}
-			else if (hrs > 1 && min > 0){
-				hrs -= 1;
+			else if (hrs > 1 && min > 0 && min < 60) {	// Otherwise, the fine equals to $25 for the 1st hour plus $10 for each additional hours
+				
 				parkedFine = 25 + hrs*10;
 			}
 			
@@ -181,8 +184,8 @@ public class Project_2 {
 	}
 
 	public static void main(String[] args) {
-		ParkedCar parkedCar = new ParkedCar("Lamborghini", "Aventador LP 700-4", "Black", "nDebt", 145);
-		ParkingMeter parkingMeter = new ParkingMeter(24);
+		ParkedCar parkedCar = new ParkedCar("Lamborghini", "Aventador LP 700-4", "Black", "nDebt", 121);
+		ParkingMeter parkingMeter = new ParkingMeter(60);
 		PoliceOfficer policeOfficer = new PoliceOfficer("Howard A. Pollman", 8441);
 		ParkingTicket parkingTicket = new ParkingTicket();
 		
